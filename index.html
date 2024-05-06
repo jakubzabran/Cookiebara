@@ -90,29 +90,7 @@
 
     <div class="overlay" id="overlay"></div>
 
-    <div id="consent-manager" class="consent-manager-popup" ckbr-ui="consent-manager">
-        <h2>Cookie Preferences</h2>
-        <form id="consent-form">
-            <label>
-                <input type="checkbox" ckbr-ui="analytics">
-                Analytics
-            </label>
-            <label>
-                <input type="checkbox" ckbr-ui="marketing">
-                Marketing
-            </label>
-            <label>
-                <input type="checkbox" ckbr-ui="personalization">
-                Personalization
-            </label>
-            <label>
-                <input type="checkbox" ckbr-ui="uncategorized">
-                Uncategorized
-            </label>
-            <button type="submit" ckbr-ui="submit">Save Preferences</button>
-            <button type="button" id="close-manager">Close</button>
-        </form>
-    </div>
+    <div id="consent-manager" ckbr-ui="consent-manager" scroll="enable" class="consent-manager-popup popup-component cookies_preferences"><div class="cookies-consent-preferences"><div class="padding-medium"><div class="popup-heading"><h3>Nastavení cookies</h3><img src="https://assets-global.website-files.com/660c4f00650cb372796ffd3f/661c32121eb071b342e7e94d_menu.svg" loading="lazy" data-w-id="eb340813-c517-d053-9369-d77a0995e88d" fs-cc="close" alt="Menu Icon" scroll="enable" class="close-popup"></div><div class="popup-content"><div class="cookie-text">Používáme cookies k analýze návštěvnosti, personalizaci reklam a poskytování funkcí sociálních médií. </div><div class="popup-preferences-options-list w-form"><form id="wf-form-Cookie-Manager" name="wf-form-Cookie-Manager" data-name="Cookie Manager" method="get" class="preferences-options-form" data-wf-page-id="660c4f01650cb372796ffd7a" data-wf-element-id="f254197e-b40a-33e1-040a-4ab42e18edef" aria-label="Cookie Manager"><div class="popup-prefernces-item"><div class="prefs_toggle-wrapper"><div class="prefs_label">Analytické cookies</div><label class="w-checkbox prefs_checkbox-field"><input type="checkbox" name="analytics" id="analytics" data-name="analytics" ckbr-ui="analytics" class="w-checkbox-input prefs_checkbox"><span for="analytics" class="prefs_checkbox-label w-form-label">Essential</span><div class="prefs_toggle"></div></label></div><div class="cookie-option-text">Analytické cookies nám umožňují lépe porozumět, jak návštěvníci používají náš web, což nám pomáhá neustále je zlepšovat. Informace jsou zpracovávány anonymně.</div></div><div class="popup-prefernces-item"><div class="prefs_toggle-wrapper"><div class="prefs_label">Marketingové cookies</div><label class="w-checkbox prefs_checkbox-field"><input type="checkbox" name="Marketing" id="marketing" data-name="Marketing" ckbr-ui="marketing" class="w-checkbox-input prefs_checkbox"><span for="Marketing" class="prefs_checkbox-label w-form-label">Essential</span><div class="prefs_toggle"></div></label></div><div class="cookie-option-text">Marketingové cookies nám pomáhají zobrazovat reklamy, které jsou pro každého uživatele přizpůsobené a zajímavé. </div></div><div class="popup-footer"><a ckbr-ui="submit" data-w-id="f8e0c020-840f-61c5-05fe-9dd53615f1ff" href="#">Povolit vybrané</a><a ckbr-ui="allow" data-w-id="f8e0c020-840f-61c5-05fe-9dd53615f1fd" href="#" class="button services w-button">Povolit vše</a></div></form><div class="w-form-done" tabindex="-1" role="region" aria-label="Cookie Manager success"><div>Thank you! Your submission has been received!</div></div><div class="w-form-fail" tabindex="-1" role="region" aria-label="Cookie Manager failure"><div>Oops! Something went wrong while submitting the form.</div></div></div></div></div></div></div>
 
     <script>
         const showManager = () => {

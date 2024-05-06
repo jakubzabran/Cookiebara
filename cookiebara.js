@@ -49,17 +49,28 @@
     function loadConsentsIntoForm() {
         const formElement = document.querySelector('[ckbr-ui="consent-manager"]');
         if (!formElement) return;
-
+    
         const currentConsents = getCookie(COOKIE_NAME) || DEFAULT_CONSENT;
         CATEGORIES.forEach(category => {
             if (category !== 'essential') {
                 const checkbox = formElement.querySelector(`input[ckbr-ui="${category}"]`);
                 if (checkbox) {
-                    checkbox.checked = currentConsents[category];
+                    updateCheckbox(checkbox, currentConsents[category]);
                 }
             }
         });
     }
+    
+    function updateCheckbox(checkbox, shouldCheck) {
+        if (checkbox.checked !== shouldCheck) {
+            checkbox.checked = shouldCheck; 
+            
+            checkbox.dispatchEvent(new Event('click', { bubbles: true }));
+            checkbox.dispatchEvent(new Event('input', { bubbles: true }));
+            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    }
+    
 
     function handleUserAction(action, consentElement = null) {
         const existingConsents = getCookie(COOKIE_NAME) || DEFAULT_CONSENT;
