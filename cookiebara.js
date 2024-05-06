@@ -26,9 +26,9 @@
                 acc[key] = value;
                 return acc;
             }, {});
-
+        console.log(`Cookie retrieved: ${name} = ${cookies[name] ? cookies[name] : 'Not Found'}`);
         return cookies[name] ? JSON.parse(cookies[name]) : null;
-    }
+    }    
 
     function pushToGTM(event) {
         window.dataLayer = window.dataLayer || [];
