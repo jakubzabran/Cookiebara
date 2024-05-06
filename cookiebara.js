@@ -15,7 +15,6 @@
         const date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         document.cookie = `${name}=${JSON.stringify(value)}; expires=${date.toUTCString()}; path=/`;
-        console.log(`Cookie set: ${name} = ${JSON.stringify(value)}`);
     }
 
     function getCookie(name) {
@@ -26,7 +25,6 @@
                 acc[key] = value;
                 return acc;
             }, {});
-        console.log(`Cookie retrieved: ${name} = ${cookies[name] ? cookies[name] : 'Not Found'}`);
         return cookies[name] ? JSON.parse(cookies[name]) : null;
     }    
 
