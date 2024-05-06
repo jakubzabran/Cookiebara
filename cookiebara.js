@@ -47,7 +47,7 @@
     }
 
     function loadConsentsIntoForm() {
-        const formElement = document.getElementById('consent-manager');
+        const formElement = document.querySelector('[ckbr-ui="consent-manager"]');
         if (!formElement) return;
 
         const currentConsents = getCookie(COOKIE_NAME) || DEFAULT_CONSENT;
