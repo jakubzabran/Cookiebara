@@ -34,7 +34,6 @@
     function triggerConsentChange(category, newConsent, oldConsent) {
         if (newConsent !== oldConsent) {
             const event = `${category}-${newConsent ? 'activated' : 'deactivated'}`;
-            
             pushToGTM(event);
         }
     }
@@ -98,9 +97,12 @@
             });
         }
 
-        updateConsent(consent);
+        updateConsent(consents);
         hideElement(document.querySelector('[ckbr-ui="consent-banner"]'));
     }
+
+
+
 
     function showElement(element, display = 'block') {
         if (element) {
