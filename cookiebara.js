@@ -18,13 +18,11 @@
     }
 
     function getCookie(name) {
-        const cookies = document.cookie
-            .split("; ")
-            .reduce((acc, cookie) => {
-                const [key, value] = cookie.split("=");
-                acc[key] = value;
-                return acc;
-            }, {});
+        const cookies = document.cookie.split("; ").reduce((acc, cookie) => {
+            const [key, value] = cookie.split("=");
+            acc[key] = value;
+            return acc;
+        }, {});
         return cookies[name] ? JSON.parse(cookies[name]) : null;
     }    
 
@@ -33,24 +31,30 @@
         window.dataLayer.push({ event: event });
     }
 
-    function triggerConsentChange(category, consent) {
-        const event = `${category}-${consent ? 'activated' : 'deactivated'}`;
-        pushToGTM(event);
+    function triggerConsentChange(category, newConsent, oldConsent) {
+        if (newConsent !== oldConsent) {
+            const event = `${category}-${newConsent ? 'activated' : 'deactivated'}`;
+            
+            pushToGTM(event);
+        }
     }
 
-    function updateConsent(consents) {
-        setCookie(COOKIE_NAME, consents, COOKIE_EXPIRATION_DAYS);
+    function updateConsent(newConsents) {
+        const existingConsents = getCookie(COOKIE_NAME) || DEFAULT_CONSENT;
+        setCookie(COOKIE_NAME, newConsents, COOKIE_EXPIRATION_DAYS);
         setCookie(COOKIE_UPDATED_FLAG, true, COOKIE_EXPIRATION_DAYS);
+        
         for (const category of CATEGORIES) {
-            triggerConsentChange(category, consents[category]);
+            triggerConsentChange(category, newConsents[category], existingConsents[category]);
         }
     }
 
     function loadConsentsIntoForm() {
         const formElement = document.querySelector('[ckbr-ui="consent-manager"]');
         if (!formElement) return;
-    
+
         const currentConsents = getCookie(COOKIE_NAME) || DEFAULT_CONSENT;
+        
         CATEGORIES.forEach(category => {
             if (category !== 'essential') {
                 const checkbox = formElement.querySelector(`input[ckbr-ui="${category}"]`);
@@ -60,36 +64,36 @@
             }
         });
     }
-    
+
     function updateCheckbox(checkbox, shouldCheck) {
+        
         if (checkbox.checked !== shouldCheck) {
-            checkbox.checked = shouldCheck; 
-            
+            checkbox.checked = shouldCheck;
+
             checkbox.dispatchEvent(new Event('click', { bubbles: true }));
             checkbox.dispatchEvent(new Event('input', { bubbles: true }));
             checkbox.dispatchEvent(new Event('change', { bubbles: true }));
         }
     }
-    
 
     function handleUserAction(action, consentElement = null) {
+
         const existingConsents = getCookie(COOKIE_NAME) || DEFAULT_CONSENT;
         const consents = { ...existingConsents };
 
-        if (action === 'allow') {
-            CATEGORIES.forEach(category => consents[category] = true);
-        } else if (action === 'deny') {
+        if (action === 'allow' || action === 'deny') {
             CATEGORIES.forEach(category => {
                 if (category !== 'essential') {
-                    consents[category] = false;
+                    consents[category] = (action === 'allow');
                 }
             });
         } else if (action === 'submit' && consentElement) {
-            const checkboxes = consentElement.querySelectorAll('input[type="checkbox"]');
+            const checkboxes = consentElement.querySelectorAll('input[type="checkbox"][ckbr-ui]');
             checkboxes.forEach(checkbox => {
                 const category = checkbox.getAttribute('ckbr-ui');
                 if (CATEGORIES.includes(category)) {
                     consents[category] = checkbox.checked;
+                    console.log(`${category}: ${checkbox.checked}`);
                 }
             });
         }
@@ -97,6 +101,9 @@
         updateConsent(consents);
         hideElement(document.querySelector('[ckbr-ui="consent-banner"]'));
     }
+
+
+
 
     function showElement(element, display = 'block') {
         if (element) {
@@ -126,21 +133,20 @@
         elements.forEach(element => {
             const action = element.getAttribute('ckbr-ui');
             if (['allow', 'deny', 'submit'].includes(action)) {
-                element.addEventListener('click', () => handleUserAction(action, element.closest('#consent-manager')));
+                element.addEventListener('click', (event) => {
+                    event.preventDefault();  // Prevent the default link behavior
+                    const formContainer = element.closest('[ckbr-ui="consent-manager"]');
+                    handleUserAction(action, formContainer);
+                });
             }
         });
 
-        const formElement = document.querySelector('#consent-form');
-        if (formElement) {
-            formElement.addEventListener('submit', event => {
-                event.preventDefault(); // Prevent the default form submission
-                handleUserAction('submit', formElement);
-            });
-        }
-
         const openManagerButton = document.querySelector('[ckbr-ui="open-manager"]');
         if (openManagerButton) {
-            openManagerButton.addEventListener('click', loadConsentsIntoForm);
+            openManagerButton.addEventListener('click', () => {
+                const formContainer = openManagerButton.closest('[ckbr-ui="consent-manager"]');
+                loadConsentsIntoForm(formContainer);  // Ensure the right context is passed if necessary
+            });
         }
     }
 
