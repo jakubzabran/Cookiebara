@@ -98,7 +98,7 @@
             });
         }
 
-        updateConsent(consents);
+        updateConsent(consent);
         hideElement(document.querySelector('[ckbr-ui="consent-banner"]'));
     }
 
