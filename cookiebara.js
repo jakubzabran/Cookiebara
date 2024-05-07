@@ -102,9 +102,6 @@
         hideElement(document.querySelector('[ckbr-ui="consent-banner"]'));
     }
 
-
-
-
     function showElement(element, display = 'block') {
         if (element) {
             element.style.display = display;
