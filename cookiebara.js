@@ -92,7 +92,6 @@
                 const category = checkbox.getAttribute('ckbr-ui');
                 if (CATEGORIES.includes(category)) {
                     consents[category] = checkbox.checked;
-                    console.log(`${category}: ${checkbox.checked}`);
                 }
             });
         }
