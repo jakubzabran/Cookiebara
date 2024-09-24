@@ -8,7 +8,7 @@
     let CATEGORIES = [...ALL_CATEGORIES];
 
     const DEFAULT_CONSENT = {
-        essential: false, 
+        essential: false,
         analytics: false,
         marketing: false,
         personalization: false,
@@ -46,8 +46,9 @@
         window.dataLayer.push({ event: event });
     }
 
+    // This updated function only triggers consent change events for available cookies
     function triggerConsentChange(category, newConsent, oldConsent) {
-        if (newConsent !== oldConsent) {
+        if (oldConsent !== undefined && newConsent !== oldConsent) {
             const event = `${category}-${newConsent ? 'activated' : 'deactivated'}`;
             pushToGTM(event);
         }
@@ -59,7 +60,9 @@
         setCookie(COOKIE_UPDATED_FLAG, true, COOKIE_EXPIRATION_DAYS);
 
         for (const category of CATEGORIES) {
-            triggerConsentChange(category, newConsents[category], existingConsents[category]);
+            if (existingConsents[category] !== undefined) {
+                triggerConsentChange(category, newConsents[category], existingConsents[category]);
+            }
         }
     }
 
@@ -131,7 +134,9 @@
             showElement(consentBanner);
         } else {
             CATEGORIES.forEach(category => {
-                triggerConsentChange(category, existingConsents[category]);
+                if (existingConsents[category] !== undefined) {
+                    triggerConsentChange(category, existingConsents[category]);
+                }
             });
         }
 
