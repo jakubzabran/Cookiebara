@@ -2,7 +2,11 @@
     const COOKIE_NAME = 'ckbr';
     const COOKIE_UPDATED_FLAG = 'ckbr_updated-ui';
     const COOKIE_EXPIRATION_DAYS = 180;
-    const CATEGORIES = ['essential', 'analytics', 'marketing', 'personalization', 'uncategorized'];
+
+    // Default categories with flexibility for dynamic setup
+    const ALL_CATEGORIES = ['essential', 'analytics', 'marketing', 'personalization', 'uncategorized'];
+    let CATEGORIES = [...ALL_CATEGORIES];
+
     const DEFAULT_CONSENT = {
         essential: true,
         analytics: false,
@@ -10,6 +14,18 @@
         personalization: false,
         uncategorized: false
     };
+
+    // Load allowed categories from script attribute or window object
+    function getAllowedCategories() {
+        const scriptElement = document.querySelector('script[data-allowed-categories]');
+        if (scriptElement) {
+            const allowed = scriptElement.getAttribute('data-allowed-categories');
+            if (allowed) {
+                return allowed.split(',').map(cat => cat.trim());
+            }
+        }
+        return ALL_CATEGORIES;
+    }
 
     function setCookie(name, value, days) {
         const date = new Date();
@@ -24,7 +40,7 @@
             return acc;
         }, {});
         return cookies[name] ? JSON.parse(cookies[name]) : null;
-    }    
+    }
 
     function pushToGTM(event) {
         window.dataLayer = window.dataLayer || [];
@@ -42,7 +58,7 @@
         const existingConsents = getCookie(COOKIE_NAME) || DEFAULT_CONSENT;
         setCookie(COOKIE_NAME, newConsents, COOKIE_EXPIRATION_DAYS);
         setCookie(COOKIE_UPDATED_FLAG, true, COOKIE_EXPIRATION_DAYS);
-        
+
         for (const category of CATEGORIES) {
             triggerConsentChange(category, newConsents[category], existingConsents[category]);
         }
@@ -53,7 +69,7 @@
         if (!formElement) return;
 
         const currentConsents = getCookie(COOKIE_NAME) || DEFAULT_CONSENT;
-        
+
         CATEGORIES.forEach(category => {
             if (category !== 'essential') {
                 const checkbox = formElement.querySelector(`input[data-ckbr-ui="${category}"]`);
@@ -111,6 +127,8 @@
     }
 
     function initialize() {
+        CATEGORIES = getAllowedCategories();  // Dynamically set allowed categories
+
         const existingConsents = getCookie(COOKIE_NAME);
         const consentBanner = document.querySelector('[data-ckbr-ui="consent-banner"]');
 
