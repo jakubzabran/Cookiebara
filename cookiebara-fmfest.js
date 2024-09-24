@@ -1,9 +1,3 @@
-// Load the Cookiebara script
-const script = document.createElement('script');
-script.src = "https://cdn.jsdelivr.net/gh/jakubzabran/cookiebara@main/cookiebara.js";
-script.async = true;
-document.head.appendChild(script);
-
 // Inject the cookie popup HTML into the page
 document.body.insertAdjacentHTML('beforeend', `
     <div id="popup-banner" class="popup-container" style="display: none;">
