@@ -8,14 +8,13 @@
     let CATEGORIES = [...ALL_CATEGORIES];
 
     const DEFAULT_CONSENT = {
-        essential: false, // Essential can also be false now
+        essential: false, 
         analytics: false,
         marketing: false,
         personalization: false,
         uncategorized: false
     };
 
-    // Load allowed categories from script attribute or window object
     function getAllowedCategories() {
         const scriptElement = document.querySelector('script[data-allowed-categories]');
         if (scriptElement) {
@@ -123,7 +122,7 @@
     }
 
     function initialize() {
-        CATEGORIES = getAllowedCategories();  // Dynamically set allowed categories
+        CATEGORIES = getAllowedCategories();  
 
         const existingConsents = getCookie(COOKIE_NAME);
         const consentBanner = document.querySelector('[data-ckbr-ui="consent-banner"]');
