@@ -8,7 +8,7 @@
     let CATEGORIES = [...ALL_CATEGORIES];
 
     const DEFAULT_CONSENT = {
-        essential: true,
+        essential: false, // Essential can also be false now
         analytics: false,
         marketing: false,
         personalization: false,
@@ -71,11 +71,9 @@
         const currentConsents = getCookie(COOKIE_NAME) || DEFAULT_CONSENT;
 
         CATEGORIES.forEach(category => {
-            if (category !== 'essential') {
-                const checkbox = formElement.querySelector(`input[data-ckbr-ui="${category}"]`);
-                if (checkbox) {
-                    updateCheckbox(checkbox, currentConsents[category]);
-                }
+            const checkbox = formElement.querySelector(`input[data-ckbr-ui="${category}"]`);
+            if (checkbox) {
+                updateCheckbox(checkbox, currentConsents[category]);
             }
         });
     }
@@ -96,9 +94,7 @@
 
         if (action === 'allow' || action === 'deny') {
             CATEGORIES.forEach(category => {
-                if (category !== 'essential') {
-                    consents[category] = (action === 'allow');
-                }
+                consents[category] = (action === 'allow');
             });
         } else if (action === 'submit' && consentElement) {
             const checkboxes = consentElement.querySelectorAll('input[type="checkbox"][data-ckbr-ui]');
